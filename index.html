@@ -34,7 +34,7 @@
           });
           $.ajax({
             method: "POST",
-            url: "check/",
+            url: "check/" + $(this).attr('name') + "/",
             dataType:"json",
             data: {name : $(this).attr('name'), value : $(this).val()},
             success: function(response) {
