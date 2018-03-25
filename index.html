@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <form action="/action_page.php">
+      <label>Mail: </label>
+      <input type="text" name="mail" />
+      <br>
+      <label>Nip: </label>
+      <input type="number" name="nip" />
+      <br>
+      <label>Pesel: </label>
+      <input type="number" name="pesel" />
+      <br>
+      <label>Regon: </label>
+      <input type="text" name="regon" />
+      <br>
+      <label>Kod pocztowy: </label>
+      <input type="text" name="code" />
+      <br>
+      <button type="button">Wyślij</button>
+    </form>
+    <script type="text/javascript">
+      $("button").click(function (){
+        $('.warning').remove();
+        $('input').each(function () {
+          console.log($(this));
+          var dane ={name : $(this).attr('name'), value : $(this).val()};
+          $.ajaxSetup({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+          });
+          $.ajax({
+            method: "POST",
+            url: "check/",
+            dataType:"json",
+            data: {name : $(this).attr('name'), value : $(this).val()},
+            success: function(response) {
+              for(key in response){
+                if (response[key] == 1) {
+                }else {
+                  $("input[name='" + key + "']").after('<p class="warning">' + response[key] + '</p>');
+                }
+              }
+            },
+            error: function(msg){
+              console.log(msg);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
